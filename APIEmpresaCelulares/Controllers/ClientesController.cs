@@ -12,8 +12,6 @@ namespace APIEmpresaCelulares.Controllers
     public class ClientesController : ControllerBase
     {
         private readonly AppDbContext _context;
-
-
         public ClientesController(AppDbContext context)
         {
             _context = context;
