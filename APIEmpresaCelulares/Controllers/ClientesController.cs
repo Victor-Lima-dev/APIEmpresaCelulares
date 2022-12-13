@@ -68,7 +68,7 @@ namespace APIEmpresaCelulares.Controllers
 
             return cliente;
         }
-
+        
         //GET: /Clientes/{regiao}/{genero}
         [HttpGet("{regiao}/{genero}")]
         public async Task<ActionResult<IEnumerable<Cliente>>> GetClientePorRegiaoGenero(string regiao, string genero)
@@ -87,6 +87,8 @@ namespace APIEmpresaCelulares.Controllers
         [HttpPost("/Cadastrar")]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
+         
+
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
 
@@ -116,14 +118,13 @@ namespace APIEmpresaCelulares.Controllers
             if(id != cliente.ClienteId)
             {
                 return BadRequest();
-            }
-          
+            }         
             _context.Clientes.Remove(cliente);
             await _context.SaveChangesAsync();
             return Ok();
         }
        
-
+        
 
 
     }
