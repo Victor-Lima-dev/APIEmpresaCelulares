@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace APIEmpresaCelulares.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class MensagensController : ControllerBase
     {
@@ -94,12 +94,36 @@ namespace APIEmpresaCelulares.Controllers
 
             return NoContent();
         }
-
-        private bool MensagemExists(int id)
+        
+        [HttpGet("/{Ano}/{Mes}")]
+        public async Task<IActionResult> GetMensagemData(int mes, int ano)
         {
-            return _context.Mensagens.Any(e => e.MensagemId == id);
+            var mensagem = await _context.Mensagens.Where(m => m.Data.Month == mes && m.Data.Year == ano).ToListAsync();
+
+            if (mensagem == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(mensagem);
         }
 
-        
+        [HttpPost("/enviarMensagem")]
+        public async Task<IActionResult> EnviarMensagem(Mensagem mensagem, Cliente cliente)
+        {
+                       
+          var mensagemVerificacao =  _context.Mensagens.Any(m => m.MensagemId == mensagem.MensagemId);
+          var clienteVerificacao = _context.Clientes.Any(m => m.ClienteId == cliente.ClienteId);
+
+            if (mensagemVerificacao == false || clienteVerificacao == false)
+            {
+                return NotFound();
+            }
+
+
+           return Ok("Mensagem enviada");
+        }
+
+
     }
 }
