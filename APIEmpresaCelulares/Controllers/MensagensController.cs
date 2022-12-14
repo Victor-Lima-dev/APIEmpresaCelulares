@@ -48,24 +48,13 @@ namespace APIEmpresaCelulares.Controllers
             }
 
             _context.Entry(mensagem).State = EntityState.Modified;
+            
+            
+               await _context.SaveChangesAsync();
+       
+           
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MensagemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok("Mensagem modificada");
         }
 
         // POST: api/Mensagens
@@ -78,6 +67,8 @@ namespace APIEmpresaCelulares.Controllers
 
             return CreatedAtAction("GetMensagem", new { id = mensagem.MensagemId }, mensagem);
         }
+        
+        
 
         // DELETE: api/Mensagens/5
         [HttpDelete("{id}")]
@@ -109,10 +100,10 @@ namespace APIEmpresaCelulares.Controllers
         }
 
         [HttpPost("/enviarMensagem")]
-        public async Task<IActionResult> EnviarMensagem(Mensagem mensagem, Cliente cliente)
+        public async Task<IActionResult> EnviarMensagem(int mensagem, Cliente cliente)
         {
                        
-          var mensagemVerificacao =  _context.Mensagens.Any(m => m.MensagemId == mensagem.MensagemId);
+          var mensagemVerificacao =  _context.Mensagens.Any(m => m.MensagemId == mensagem);
           var clienteVerificacao = _context.Clientes.Any(m => m.ClienteId == cliente.ClienteId);
 
             if (mensagemVerificacao == false || clienteVerificacao == false)

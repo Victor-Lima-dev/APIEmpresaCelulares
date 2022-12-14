@@ -111,11 +111,13 @@ namespace APIEmpresaCelulares.Controllers
 
         //delete cliente
         [HttpDelete]
-        public async Task<IActionResult> DeleteCliente(int id, Cliente cliente)
+        public async Task<IActionResult> DeleteCliente(int id)
         {
-            if(id != cliente.ClienteId)
+            var cliente = _context.Clientes.Find(id);
+
+            if (cliente == null)
             {
-                return BadRequest();
+                return NotFound();
             }         
             _context.Clientes.Remove(cliente);
             await _context.SaveChangesAsync();
